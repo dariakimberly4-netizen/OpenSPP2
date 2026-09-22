@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+    <t t-name="spp_payout_hub.PayoutHub">
+        <main class="spp-payout-hub" t-att-aria-busy="state.loading ? 'true' : 'false'">
+            <header class="ph-header">
+                <div><div class="ph-eyebrow">PROGRAM OPERATIONS</div><h1>Payout Hub</h1><p>From beneficiary registration to payment tracking.</p></div>
+                <button class="ph-refresh" t-on-click="refresh" t-att-disabled="state.loading"><i class="fa fa-refresh" aria-hidden="true"/> Refresh counts</button>
+            </header>
+            <aside class="ph-notice" t-if="state.notice">
+                <div><strong>NEW · Your payout workspace</strong><span>Open a module below. Return using the Payout Hub menu under Programs.</span></div>
+                <button t-on-click="dismissNotice" aria-label="Dismiss new feature highlight"><i class="fa fa-times" aria-hidden="true"/></button>
+            </aside>
+            <section t-if="state.error" class="ph-status" role="alert"><h2>Counts are unavailable</h2><p>Your account may not have access, or the connection was interrupted.</p><button class="ph-refresh" t-on-click="refresh">Try again</button></section>
+            <section t-elif="state.loading" class="ph-status" role="status">Loading your payout workspace…</section>
+            <t t-else="">
+                <section class="ph-metrics" aria-label="Payout status">
+                    <article t-foreach="state.metrics" t-as="metric" t-key="metric.key" t-att-class="'ph-metric ph-' + metric.key">
+                        <span t-esc="metric.label"/><strong t-esc="metric.count === null ? '—' : metric.count.toLocaleString()"/>
+                        <small t-if="metric.count === null">Access required</small><small t-else="">Within your permitted records</small>
+                    </article>
+                </section>
+                <section class="ph-workspace" aria-label="Payout modules">
+                    <div class="ph-orbit">
+                        <div class="ph-ring" aria-hidden="true"/>
+                        <button class="ph-center" t-on-click="openOverview" t-att-disabled="state.opening" aria-label="Payout Hub: open payout cycles">
+                            <i class="fa fa-bank" aria-hidden="true"/><span>PAYOUT</span><strong>HUB</strong><small>Open payout cycles <i class="fa fa-arrow-right" aria-hidden="true"/></small>
+                        </button>
+                        <button t-foreach="state.modules" t-as="module" t-key="module.key" t-att-class="'ph-module ph-slot-' + module_index"
+                            t-att-disabled="!module.available || state.opening" t-on-click="() => this.openModule(module)">
+                            <div class="ph-module-top"><i t-att-class="'fa ' + module.icon" aria-hidden="true"/><span t-esc="module.available ? module.count.toLocaleString() : 'Locked'"/></div>
+                            <strong t-esc="module.label"/><small t-esc="module.available ? module.description : 'Ask your administrator for access'"/>
+                        </button>
+                    </div>
+                </section>
+                <footer class="ph-footer"><span><i class="fa fa-lock" aria-hidden="true"/> Your account permissions apply to every module.</span><span>Counts cover all accessible cycles. Issued payments are not necessarily paid.</span></footer>
+            </t>
+        </main>
+    </t>
+</templates>
