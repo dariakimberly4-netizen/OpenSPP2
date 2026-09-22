@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_payout_hub" model="ir.actions.client">
+        <field name="name">Payout Hub</field>
+        <field name="tag">spp_payout_hub.dashboard</field>
+        <field name="path">payout-hub</field>
+    </record>
+    <menuitem id="menu_payout_hub" name="Payout Hub" action="action_payout_hub"
+        parent="spp_programs.spp_program_menu_root" sequence="-10"
+        groups="spp_programs.group_programs_viewer,spp_security.group_spp_admin"/>
+</odoo>
